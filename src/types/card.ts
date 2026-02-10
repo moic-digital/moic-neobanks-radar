@@ -4,13 +4,13 @@ export interface CardData {
   readonly issuer: string
   readonly logo: string
   readonly type: "Credit" | "Debit" | "Prepaid"
-  readonly network: "Visa" | "Mastercard"
+  readonly network: "Visa" | "Mastercard" | "Visa/Mastercard"
   readonly cashbackMax: number | string
   readonly annualFee: string
   readonly fxFee: string
   readonly perks: readonly string[]
   readonly signupBonus: string
-  readonly custody: "Custodial" | "Self-Custody" | "Non-Custodial"
+  readonly custody: "Custodial" | "Self-Custody" | "Non-Custodial" | "Hybrid"
   readonly regions: string
   readonly officialLink: string
   readonly cardGradient: string
