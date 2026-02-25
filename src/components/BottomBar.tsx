@@ -35,7 +35,7 @@ export function FloatingBar({ selectedCards, onCompare }: FloatingBarProps) {
               alt={card.name}
               onError={(e) => {
                 const target = e.target as HTMLImageElement
-                target.src = `https://ui-avatars.com/api/?name=${card.issuer}&background=random`
+                target.style.display = "none"
               }}
             />
           ))}

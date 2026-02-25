@@ -168,7 +168,7 @@ export default function CryptoCard({
                     className="w-full h-full object-cover rounded-full"
                     onError={(e) => {
                       const target = e.target as HTMLImageElement
-                      target.src = `https://ui-avatars.com/api/?name=${card.issuer}&background=random`
+                      target.style.display = "none"
                     }}
                   />
                 </div>

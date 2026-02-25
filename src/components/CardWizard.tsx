@@ -3,13 +3,13 @@
 import { useState } from "react"
 import { Globe, X, Compass, ChevronRight } from "lucide-react"
 import { CardData } from "@/types/card"
-import { cards as allCards } from "@/data/cards"
 import { matchesRegion } from "@/utils/regions"
 
 interface CardWizardProps {
   readonly isOpen: boolean
   readonly onClose: () => void
   readonly onSelectCard: (id: string) => void
+  readonly cards: readonly CardData[]
 }
 
 interface WizardState {
@@ -41,6 +41,7 @@ export default function CardWizard({
   isOpen,
   onClose,
   onSelectCard,
+  cards: allCards,
 }: CardWizardProps) {
   const [step, setStep] = useState<WizardStep>("region")
   const [state, setState] = useState<WizardState>({
@@ -209,7 +210,7 @@ export default function CardWizard({
                       alt={card.name}
                       onError={(e) => {
                         const target = e.target as HTMLImageElement
-                        target.src = `https://ui-avatars.com/api/?name=${card.issuer}&background=random`
+                        target.style.display = "none"
                       }}
                     />
                     <div className="flex-1 min-w-0">

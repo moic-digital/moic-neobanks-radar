@@ -6,6 +6,7 @@ export interface CardData {
   readonly type: "Credit" | "Debit" | "Prepaid"
   readonly network: "Visa" | "Mastercard" | "Visa/Mastercard"
   readonly cashbackMax: number | string
+  readonly cashbackMin: string
   readonly annualFee: string
   readonly fxFee: string
   readonly perks: readonly string[]
@@ -16,12 +17,11 @@ export interface CardData {
   readonly cardGradient: string
   readonly tierColor: string
   readonly metal: boolean
-  readonly stakingRequired: string
-  readonly atmLimit: string
-  readonly mobilePay: boolean
   readonly supportedAssets: string
   readonly kyc: "Required" | "Light" | "None"
   readonly supportedCurrencies: readonly string[]
+  readonly age: string
+  readonly airdropFarming: string
   readonly rank?: number
 }
 

@@ -9,12 +9,11 @@ import {
   CreditCard,
   Globe,
   Shield,
-  Coins,
-  Smartphone,
   Wallet,
   Gift,
   Star,
   Layers,
+  Calendar,
 } from "lucide-react"
 import { CardData } from "@/types/card"
 
@@ -54,13 +53,11 @@ const COMPARE_ROWS: readonly CompareRow[] = [
   },
   { label: "Annual Fee", key: "annualFee" },
   { label: "FX Fee", key: "fxFee" },
-  { label: "Staking", key: "stakingRequired", icon: Coins },
-  { label: "ATM", key: "atmLimit" },
-  { label: "Mobile Pay", key: "mobilePay", type: "boolean", icon: Smartphone },
   { label: "Assets", key: "supportedAssets", icon: Wallet },
   { label: "Metal", key: "metal", type: "boolean" },
   { label: "Bonus", key: "signupBonus", icon: Gift },
   { label: "Regions", key: "regions" },
+  { label: "Age", key: "age", icon: Calendar },
 ]
 
 export default function CompareView({
@@ -139,7 +136,7 @@ export default function CompareView({
                               className="w-full h-full object-cover"
                               onError={(e) => {
                                 const target = e.target as HTMLImageElement
-                                target.src = `https://ui-avatars.com/api/?name=${card.issuer}&background=random`
+                                target.style.display = "none"
                               }}
                             />
                           </div>
