@@ -13,10 +13,32 @@
   --font-display: "Clash Grotesk", "Sora", sans-serif;
 
   --animate-float: float 6s ease-in-out infinite;
+  --animate-scroll-up-1: scroll-up 35s linear infinite;
+  --animate-scroll-up-2: scroll-up 45s linear infinite;
+  --animate-scroll-up-3: scroll-up 55s linear infinite;
+  --animate-scroll-down-1: scroll-down 40s linear infinite;
+  --animate-scroll-down-2: scroll-down 50s linear infinite;
+  --animate-scroll-down-3: scroll-down 60s linear infinite;
 
   @keyframes float {
     0%, 100% { transform: translateY(0); }
     50% { transform: translateY(-10px); }
+  }
+
+  @keyframes scroll-up {
+    from { transform: translate3d(0, 0, 0); }
+    to { transform: translate3d(0, -50%, 0); }
+  }
+
+  @keyframes scroll-down {
+    from { transform: translate3d(0, -50%, 0); }
+    to { transform: translate3d(0, 0, 0); }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [class*="animate-scroll-"] {
+    animation: none !important;
   }
 }
 
