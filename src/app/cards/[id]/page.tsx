@@ -1,3 +1,4 @@
+import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import Link from "next/link"
 import {
@@ -20,9 +21,59 @@ import {
 } from "lucide-react"
 import { fetchCards } from "@/lib/sheets"
 import type { CardData } from "@/types/card"
+import {
+  BASE_URL,
+  SITE_NAME,
+  buildCardDescription,
+  buildFinancialProductJsonLd,
+  buildBreadcrumbJsonLd,
+  buildFAQJsonLd,
+  safeJsonLdStringify,
+} from "@/lib/seo"
 
 interface CardPageProps {
   readonly params: Promise<{ id: string }>
+}
+
+export async function generateStaticParams() {
+  const cards = await fetchCards()
+  return cards.map((card) => ({ id: card.id }))
+}
+
+export async function generateMetadata({
+  params,
+}: CardPageProps): Promise<Metadata> {
+  const { id } = await params
+  const cards = await fetchCards()
+  const card = cards.find((c) => c.id === id)
+
+  if (!card) {
+    return { title: "Card Not Found" }
+  }
+
+  const description = buildCardDescription(card)
+  const title = `${card.name} - ${card.issuer} ${card.type} Card`
+
+  return {
+    title,
+    description,
+    openGraph: {
+      title: `${title} | ${SITE_NAME}`,
+      description,
+      url: `${BASE_URL}/cards/${card.id}`,
+      siteName: SITE_NAME,
+      locale: "en_US",
+      type: "article",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${title} | ${SITE_NAME}`,
+      description,
+    },
+    alternates: {
+      canonical: `${BASE_URL}/cards/${card.id}`,
+    },
+  }
 }
 
 interface Insight {
@@ -142,8 +193,46 @@ export default async function CardPage({ params }: CardPageProps) {
     { label: "Signup Bonus", value: card.signupBonus || "None", icon: Gift },
   ]
 
+  const financialProductJsonLd = buildFinancialProductJsonLd(card)
+  const breadcrumbJsonLd = buildBreadcrumbJsonLd(card.name, card.id)
+  const faqJsonLd = buildFAQJsonLd(card)
+
   return (
     <div className="min-h-screen bg-moic-navy text-white selection:bg-moic-blue selection:text-white">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: safeJsonLdStringify(financialProductJsonLd),
+        }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: safeJsonLdStringify(breadcrumbJsonLd),
+        }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: safeJsonLdStringify(faqJsonLd),
+        }}
+      />
+
+      {/* Breadcrumb Navigation */}
+      <nav aria-label="Breadcrumb" className="px-4 sm:px-8 pt-3 pb-0">
+        <ol className="flex items-center gap-1.5 text-[10px] sm:text-xs text-white/40">
+          <li>
+            <Link href="/" className="hover:text-white/60 transition-colors">
+              Home
+            </Link>
+          </li>
+          <li aria-hidden="true">/</li>
+          <li>
+            <span className="text-white/60">{card.name}</span>
+          </li>
+        </ol>
+      </nav>
+
       {/* Block 1 - Header */}
       <header className="border-b border-white/10 px-4 sm:px-8 py-4 sm:py-5 flex items-center justify-between gap-3">
         <div className="flex items-center gap-3 min-w-0">
@@ -162,7 +251,7 @@ export default async function CardPage({ params }: CardPageProps) {
         <a
           href={card.officialLink}
           target="_blank"
-          rel="noreferrer"
+          rel="noopener noreferrer"
           className="inline-flex items-center gap-2 px-4 py-2 bg-moic-blue text-white text-xs font-semibold rounded-lg hover:bg-moic-blue-light transition-colors shrink-0"
         >
           <span className="hidden sm:inline">Official page</span>
@@ -170,13 +259,14 @@ export default async function CardPage({ params }: CardPageProps) {
         </a>
       </header>
 
-      <main className="px-4 sm:px-8 py-6 sm:py-10 max-w-6xl mx-auto space-y-8 sm:space-y-10">
+      <main className="px-4 sm:px-8 py-6 sm:py-10 max-w-6xl mx-auto">
+      <article className="space-y-8 sm:space-y-10">
         {/* Block 2 - Identity */}
-        <section className="flex items-start gap-4 sm:gap-6">
+        <section aria-label="Card identity" className="flex items-start gap-4 sm:gap-6">
           <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-white/5 border border-white/10 overflow-hidden flex items-center justify-center shrink-0">
             <img
               src={card.logo}
-              alt={card.issuer}
+              alt={`${card.name} logo - ${card.issuer} ${card.type} card`}
               className="w-full h-full object-cover"
             />
           </div>
@@ -207,7 +297,7 @@ export default async function CardPage({ params }: CardPageProps) {
         </section>
 
         {/* Block 3 - Metrics grid */}
-        <section className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
+        <section aria-label="Key metrics" className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
           <div className="border border-amber-400/40 bg-moic-surface rounded-xl p-4 flex flex-col items-center justify-center text-center shadow-[0_0_24px_rgba(251,191,36,0.15),0_0_48px_rgba(251,191,36,0.06)] hover:-translate-y-1 hover:border-amber-400/70 hover:shadow-[0_0_24px_rgba(251,191,36,0.3),0_0_48px_rgba(251,191,36,0.12)] transition-all duration-300">
             <span className="text-amber-400 text-[9px] sm:text-[10px] uppercase tracking-widest mb-1">
               Max Cashback
@@ -248,7 +338,7 @@ export default async function CardPage({ params }: CardPageProps) {
 
         {/* Block 4 - Insights */}
         {insights.length > 0 && (
-          <section className="border border-white/[0.08] bg-moic-surface p-4 sm:p-6 rounded-2xl">
+          <section aria-label="Card insights" className="border border-white/[0.08] bg-moic-surface p-4 sm:p-6 rounded-2xl">
             <h2 className="text-sm sm:text-base font-bold tracking-wide mb-4 sm:mb-6" style={{ fontFamily: "'Clash Grotesk', sans-serif" }}>
               Insights
             </h2>
@@ -276,7 +366,7 @@ export default async function CardPage({ params }: CardPageProps) {
         )}
 
         {/* Block 5 - Key Facts */}
-        <section className="border border-white/[0.08] bg-moic-surface p-4 sm:p-6 rounded-2xl">
+        <section aria-label="Key facts" className="border border-white/[0.08] bg-moic-surface p-4 sm:p-6 rounded-2xl">
           <h2 className="text-sm sm:text-base font-bold tracking-wide mb-4" style={{ fontFamily: "'Clash Grotesk', sans-serif" }}>
             Key Facts
           </h2>
@@ -305,7 +395,7 @@ export default async function CardPage({ params }: CardPageProps) {
 
         {/* Block 6 - Highlights */}
         {card.perks.length > 0 && (
-          <section className="border border-white/[0.08] bg-moic-surface p-4 sm:p-6 rounded-2xl">
+          <section aria-label="Card highlights" className="border border-white/[0.08] bg-moic-surface p-4 sm:p-6 rounded-2xl">
             <h2 className="text-sm sm:text-base font-bold tracking-wide mb-4" style={{ fontFamily: "'Clash Grotesk', sans-serif" }}>
               Highlights
             </h2>
@@ -321,6 +411,7 @@ export default async function CardPage({ params }: CardPageProps) {
             </div>
           </section>
         )}
+      </article>
       </main>
     </div>
   )
