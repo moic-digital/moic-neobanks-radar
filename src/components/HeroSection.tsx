@@ -70,7 +70,7 @@ export default function HeroSection() {
           className="text-4xl sm:text-5xl md:text-6xl font-bold text-white tracking-tight text-center"
           style={{ fontFamily: "'Clash Grotesk', sans-serif" }}
         >
-          Neobank Radar
+          Neobanks Radar
         </h1>
 
         <div className="flex items-center gap-2.5 mt-3">

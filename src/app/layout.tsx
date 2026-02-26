@@ -10,7 +10,7 @@ const sora = Sora({
 })
 
 export const metadata: Metadata = {
-  title: "Neobank Radar | Crypto Card Aggregator",
+  title: "Neobanks Radar",
   description: "Compare and discover the best crypto debit and credit cards",
 }
 
