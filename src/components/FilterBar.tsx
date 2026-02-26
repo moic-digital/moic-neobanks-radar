@@ -7,6 +7,7 @@ import {
   Globe,
   DollarSign,
   Shield,
+  KeyRound,
 } from "lucide-react"
 import { Filters, SortOption } from "@/types/card"
 
@@ -18,7 +19,26 @@ interface FilterBarProps {
   readonly resultsCount: number
 }
 
+type TriState = "none" | "with" | "without"
+
 const SELF_CUSTODY_VALUES = ["Self-Custody", "Non-Custodial"]
+const CUSTODIAL_VALUES = ["Custodial", "Hybrid"]
+
+function getTriStateClasses(state: TriState): string {
+  if (state === "with") {
+    return "bg-moic-blue/15 border-moic-blue text-white shadow-[0_0_12px_rgba(42,96,251,0.15)]"
+  }
+  if (state === "without") {
+    return "bg-amber-500/10 border-amber-500/50 text-white shadow-[0_0_12px_rgba(245,158,11,0.1)]"
+  }
+  return "bg-white/5 border-white/10 text-white hover:border-white/20"
+}
+
+function getTriStateIconClasses(state: TriState): string {
+  if (state === "with") return "text-moic-blue"
+  if (state === "without") return "text-amber-400"
+  return "text-moic-blue"
+}
 
 export default function FilterBar({
   filters,
@@ -37,19 +57,33 @@ export default function FilterBar({
     onFilterChange({ ...filters, search: e.target.value })
   }
 
-  function isSelfCustodyActive() {
-    return SELF_CUSTODY_VALUES.some((v) => filters.custody.includes(v))
+  function getKycState(): TriState {
+    if (filters.kyc === "") return "none"
+    if (filters.kyc === "required") return "with"
+    return "without"
   }
 
-  function toggleSelfCustody() {
-    const newCustody = isSelfCustodyActive()
-      ? filters.custody.filter((v) => !SELF_CUSTODY_VALUES.includes(v))
-      : [...filters.custody, ...SELF_CUSTODY_VALUES.filter((v) => !filters.custody.includes(v))]
+  function getSelfCustodyState(): TriState {
+    if (filters.custody.length === 0) return "none"
+    if (SELF_CUSTODY_VALUES.some((v) => filters.custody.includes(v))) return "with"
+    return "without"
+  }
+
+  function cycleKyc() {
+    const state = getKycState()
+    const newKyc = state === "none" ? "required" : state === "with" ? "None" : ""
+    onFilterChange({ ...filters, kyc: newKyc })
+  }
+
+  function cycleSelfCustody() {
+    const state = getSelfCustodyState()
+    const newCustody =
+      state === "none"
+        ? [...SELF_CUSTODY_VALUES]
+        : state === "with"
+          ? [...CUSTODIAL_VALUES]
+          : []
     onFilterChange({ ...filters, custody: newCustody })
-  }
-
-  function handleKycChange(value: string) {
-    onFilterChange({ ...filters, kyc: value })
   }
 
   function clearFilters() {
@@ -67,9 +101,12 @@ export default function FilterBar({
     })
   }
 
+  const kycState = getKycState()
+  const selfCustodyState = getSelfCustodyState()
+
   return (
     <div className="w-full mb-6 sm:mb-8 py-4 sm:py-6 space-y-4">
-      {/* Row 1: Search — full width */}
+      {/* Row 1: Search */}
       <div className="relative w-full">
         <div className="absolute inset-y-0 left-0 pl-4 sm:pl-5 flex items-center pointer-events-none">
           <Search className="h-4 w-4 sm:h-5 sm:w-5 text-white/30" />
@@ -83,8 +120,44 @@ export default function FilterBar({
         />
       </div>
 
-      {/* Row 2: All filters + sort */}
+      {/* Row 2: KYC + Self-Custody (prominent tri-state) + other filters */}
       <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
+        {/* KYC tri-state */}
+        <button
+          onClick={cycleKyc}
+          className={`flex items-center justify-center gap-2 px-3 py-3 sm:py-3.5 text-xs sm:text-sm font-semibold tracking-wide transition-all border rounded-xl cursor-pointer ${getTriStateClasses(kycState)}`}
+        >
+          <Shield className={`w-4 h-4 shrink-0 ${getTriStateIconClasses(kycState)}`} />
+          <span>
+            {kycState === "none" && "KYC"}
+            {kycState === "with" && "With KYC"}
+            {kycState === "without" && "No KYC"}
+          </span>
+          {kycState !== "none" && (
+            <span
+              className={`w-1.5 h-1.5 rounded-full ${kycState === "with" ? "bg-moic-blue" : "bg-amber-400"}`}
+            />
+          )}
+        </button>
+
+        {/* Self-Custody tri-state */}
+        <button
+          onClick={cycleSelfCustody}
+          className={`flex items-center justify-center gap-2 px-3 py-3 sm:py-3.5 text-xs sm:text-sm font-semibold tracking-wide transition-all border rounded-xl cursor-pointer ${getTriStateClasses(selfCustodyState)}`}
+        >
+          <KeyRound className={`w-4 h-4 shrink-0 ${getTriStateIconClasses(selfCustodyState)}`} />
+          <span>
+            {selfCustodyState === "none" && "Self-Custody"}
+            {selfCustodyState === "with" && "Self-Custody"}
+            {selfCustodyState === "without" && "Custodial"}
+          </span>
+          {selfCustodyState !== "none" && (
+            <span
+              className={`w-1.5 h-1.5 rounded-full ${selfCustodyState === "with" ? "bg-moic-blue" : "bg-amber-400"}`}
+            />
+          )}
+        </button>
+
         {/* Region */}
         <div className="relative">
           <div className="flex items-center gap-2 bg-white/5 px-3 py-2.5 sm:py-3 border border-white/10 rounded-lg hover:border-moic-blue/50 transition-colors cursor-pointer">
@@ -147,34 +220,6 @@ export default function FilterBar({
             </select>
           </div>
         </div>
-
-        {/* KYC */}
-        <div className="relative">
-          <div className="flex items-center gap-2 bg-white/5 px-3 py-2.5 sm:py-3 border border-white/10 rounded-lg hover:border-moic-blue/50 transition-colors cursor-pointer">
-            <Shield className="w-4 h-4 text-moic-blue shrink-0" />
-            <select
-              value={filters.kyc}
-              onChange={(e) => handleKycChange(e.target.value)}
-              className="bg-transparent text-xs sm:text-sm font-medium text-white focus:outline-none cursor-pointer w-full"
-            >
-              <option value="">KYC</option>
-              <option value="required">With KYC</option>
-              <option value="None">No KYC</option>
-            </select>
-          </div>
-        </div>
-
-        {/* Self-Custody toggle */}
-        <button
-          onClick={toggleSelfCustody}
-          className={`px-3 py-2.5 sm:py-3 text-xs sm:text-sm font-semibold tracking-wide transition-all border rounded-lg ${
-            isSelfCustodyActive()
-              ? "bg-moic-blue border-moic-blue text-white"
-              : "bg-white/5 border-white/10 text-white/70 hover:border-moic-blue/50"
-          }`}
-        >
-          Self-Custody
-        </button>
 
         {/* Sort */}
         <div className="relative">
