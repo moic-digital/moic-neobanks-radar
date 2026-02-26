@@ -40,6 +40,28 @@ function getTriStateIconClasses(state: TriState): string {
   return "text-moic-blue"
 }
 
+const TRI_STATES: readonly TriState[] = ["none", "with", "without"]
+
+function getDotColor(dotState: TriState, activeState: TriState): string {
+  if (dotState !== activeState) return "bg-white/20"
+  if (activeState === "with") return "bg-moic-blue"
+  if (activeState === "without") return "bg-amber-400"
+  return "bg-white/50"
+}
+
+function TriStateDots({ state }: { readonly state: TriState }) {
+  return (
+    <div className="flex items-center gap-1">
+      {TRI_STATES.map((s) => (
+        <span
+          key={s}
+          className={`w-1.5 h-1.5 rounded-full transition-colors ${getDotColor(s, state)}`}
+        />
+      ))}
+    </div>
+  )
+}
+
 export default function FilterBar({
   filters,
   sort,
@@ -133,11 +155,7 @@ export default function FilterBar({
             {kycState === "with" && "With KYC"}
             {kycState === "without" && "No KYC"}
           </span>
-          {kycState !== "none" && (
-            <span
-              className={`w-1.5 h-1.5 rounded-full ${kycState === "with" ? "bg-moic-blue" : "bg-amber-400"}`}
-            />
-          )}
+          <TriStateDots state={kycState} />
         </button>
 
         {/* Self-Custody tri-state */}
@@ -151,11 +169,7 @@ export default function FilterBar({
             {selfCustodyState === "with" && "Self-Custody"}
             {selfCustodyState === "without" && "Custodial"}
           </span>
-          {selfCustodyState !== "none" && (
-            <span
-              className={`w-1.5 h-1.5 rounded-full ${selfCustodyState === "with" ? "bg-moic-blue" : "bg-amber-400"}`}
-            />
-          )}
+          <TriStateDots state={selfCustodyState} />
         </button>
 
         {/* Region */}
