@@ -1,23 +1,16 @@
 import type { Metadata } from "next"
-import { Space_Mono, IBM_Plex_Mono } from "next/font/google"
+import { Sora } from "next/font/google"
 import "./globals.css"
 
-const spaceMono = Space_Mono({
-  weight: ["400", "700"],
+const sora = Sora({
+  weight: ["300", "400", "500", "600", "700", "800"],
   subsets: ["latin"],
-  variable: "--font-space-mono",
-  display: "swap",
-})
-
-const ibmPlexMono = IBM_Plex_Mono({
-  weight: ["400", "500", "600", "700"],
-  subsets: ["latin"],
-  variable: "--font-ibm-plex",
+  variable: "--font-sora",
   display: "swap",
 })
 
 export const metadata: Metadata = {
-  title: "CryptoAgg | The Ultimate Crypto Card Aggregator",
+  title: "MOIC Hub | Crypto Card Aggregator",
   description: "Compare and discover the best crypto debit and credit cards",
 }
 
@@ -29,7 +22,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark">
       <body
-        className={`${spaceMono.variable} ${ibmPlexMono.variable} bg-black text-white`}
+        className={`${sora.variable} bg-moic-navy text-white antialiased`}
       >
         {children}
       </body>

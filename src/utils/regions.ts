@@ -33,5 +33,3 @@ export function matchesRegion(
 
   return false
 }
-
-export const MAX_COMPARE_CARDS = 6

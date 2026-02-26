@@ -1,15 +1,16 @@
+@import url('https://api.fontshare.com/v2/css?f[]=clash-grotesk@200,300,400,500,600,700&display=swap');
 @import "tailwindcss";
 
 @theme {
-  --color-lime-300: #D9F99D;
-  --color-lime-400: #D1F866;
-  --color-lime-500: #B8E640;
-  --color-slate-850: #151F2E;
-  --color-slate-900: #0F172A;
-  --color-slate-950: #020617;
+  --color-moic-navy: #040612;
+  --color-moic-surface: #0A0E24;
+  --color-moic-blue: #2A60FB;
+  --color-moic-blue-light: #4A7CFF;
+  --color-moic-green: #00ED4F;
+  --color-moic-green-light: #33FF72;
 
-  --font-sans: "Space Mono", "IBM Plex Mono", monospace;
-  --font-mono: "Space Mono", "IBM Plex Mono", monospace;
+  --font-sans: "Sora", sans-serif;
+  --font-display: "Clash Grotesk", "Sora", sans-serif;
 
   --animate-float: float 6s ease-in-out infinite;
 
@@ -20,28 +21,12 @@
 }
 
 * {
-  font-family: "Space Mono", "IBM Plex Mono", monospace;
+  font-family: "Sora", sans-serif;
 }
 
 body {
-  font-family: "Space Mono", "IBM Plex Mono", monospace;
-  background-color: #000;
-}
-
-.perspective-1000 {
-  perspective: 1000px;
-}
-
-.transform-style-3d {
-  transform-style: preserve-3d;
-}
-
-.backface-hidden {
-  backface-visibility: hidden;
-}
-
-.rotate-y-180 {
-  transform: rotateY(180deg);
+  font-family: "Sora", sans-serif;
+  background-color: #040612;
 }
 
 .no-scrollbar::-webkit-scrollbar {
@@ -59,20 +44,21 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  background: #000;
-  border: 2px solid #fff;
+  background: #040612;
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #D1F866;
-  border: 2px solid #000;
+  background: #2A60FB;
+  border: 2px solid #040612;
+  border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #fff;
+  background: #4A7CFF;
 }
 
 ::selection {
-  background: #D1F866;
-  color: #000;
+  background: #2A60FB;
+  color: #fff;
 }

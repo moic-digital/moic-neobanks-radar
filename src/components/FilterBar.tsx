@@ -1,10 +1,8 @@
 "use client"
 
-import { useState } from "react"
 import {
   Search,
   ChevronDown,
-  SlidersHorizontal,
   X,
   Globe,
   DollarSign,
@@ -29,8 +27,6 @@ export default function FilterBar({
   onSortChange,
   resultsCount,
 }: FilterBarProps) {
-  const [showFilters, setShowFilters] = useState(false)
-
   const hasActiveFilters =
     filters.region !== "" ||
     filters.kyc !== "" ||
@@ -68,185 +64,152 @@ export default function FilterBar({
   }
 
   return (
-    <div className="w-full mb-6 sm:mb-8 py-4 sm:py-6">
-      <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-between items-stretch sm:items-center mb-4 sm:mb-6">
-        <div className="relative flex-1 sm:max-w-md">
+    <div className="w-full mb-6 sm:mb-8 py-4 sm:py-6 space-y-4">
+      {/* Line 1: Search + Sort */}
+      <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
+        <div className="relative flex-1">
           <div className="absolute inset-y-0 left-0 pl-3 sm:pl-4 flex items-center pointer-events-none">
-            <Search className="h-4 w-4 sm:h-5 sm:w-5 text-white/50" />
+            <Search className="h-4 w-4 sm:h-5 sm:w-5 text-white/30" />
           </div>
           <input
             type="text"
-            placeholder="SEARCH..."
-            className="block w-full pl-10 sm:pl-12 pr-4 py-3 sm:py-4 bg-black border-4 border-white text-white placeholder-white/40 focus:outline-none focus:border-lime-400 text-xs sm:text-sm font-mono uppercase tracking-wider transition-colors"
+            placeholder="Search neobanks..."
+            className="block w-full pl-10 sm:pl-12 pr-4 py-3 sm:py-3.5 bg-white/5 border border-white/10 rounded-lg text-white placeholder-white/30 focus:outline-none focus:border-moic-blue focus:shadow-[0_0_12px_rgba(42,96,251,0.2)] text-xs sm:text-sm tracking-wide transition-all"
             value={filters.search}
             onChange={handleSearch}
           />
         </div>
 
-        <div className="flex items-center gap-2 sm:gap-3">
-          <div className="relative flex-1 sm:flex-initial">
-            <select
-              value={sort}
-              onChange={(e) => onSortChange(e.target.value as SortOption)}
-              className="appearance-none w-full bg-black text-white py-3 sm:py-4 pl-3 sm:pl-5 pr-10 sm:pr-12 border-4 border-white text-xs sm:text-sm font-black uppercase tracking-wider focus:outline-none focus:border-lime-400 cursor-pointer transition-colors"
-            >
-              <option value="featured">&#9733; ALL</option>
-              <option value="cashbackHigh">TOP CB</option>
-              <option value="nameAZ">A-Z</option>
-              <option value="newest">NEW</option>
-            </select>
-            <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 sm:px-4 text-white">
-              <ChevronDown className="h-4 w-4 sm:h-5 sm:w-5" />
-            </div>
-          </div>
-
-          <button
-            onClick={() => setShowFilters((p) => !p)}
-            className={`flex items-center gap-2 px-3 sm:px-4 py-3 sm:py-4 border-4 font-black uppercase text-xs sm:text-sm transition-all ${
-              showFilters || hasActiveFilters
-                ? "bg-lime-400 border-lime-400 text-black"
-                : "bg-black border-white text-white"
-            }`}
+        <div className="relative shrink-0">
+          <select
+            value={sort}
+            onChange={(e) => onSortChange(e.target.value as SortOption)}
+            className="appearance-none w-full bg-white/5 text-white py-3 sm:py-3.5 pl-3 sm:pl-4 pr-10 sm:pr-12 border border-white/10 rounded-lg text-xs sm:text-sm font-semibold focus:outline-none focus:border-moic-blue cursor-pointer transition-all"
           >
-            <SlidersHorizontal className="w-4 h-4 sm:w-5 sm:h-5" />
-            <span className="hidden sm:inline">Filters</span>
-            {hasActiveFilters && (
-              <span className="w-5 h-5 bg-black text-lime-400 text-[10px] font-black flex items-center justify-center">
-                !
-              </span>
-            )}
-          </button>
+            <option value="nameAZ">A-Z</option>
+            <option value="featured">All</option>
+            <option value="cashbackHigh">Top Cashback</option>
+            <option value="newest">Newest</option>
+          </select>
+          <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-white/40">
+            <ChevronDown className="h-4 w-4" />
+          </div>
         </div>
       </div>
 
-      {showFilters && (
-        <div className="border-4 border-white p-3 sm:p-4 mb-4 sm:mb-6 space-y-3 sm:space-y-4">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-            {/* Region */}
-            <div className="relative">
-              <label className="text-[10px] text-white/50 font-mono uppercase mb-1 block">
-                Region
-              </label>
-              <div className="flex items-center gap-2 bg-black px-3 py-2 sm:py-3 border-4 border-white hover:border-lime-400 transition-colors cursor-pointer">
-                <Globe className="w-4 h-4 text-lime-400 shrink-0" />
-                <select
-                  value={filters.region}
-                  onChange={(e) =>
-                    onFilterChange({ ...filters, region: e.target.value })
-                  }
-                  className="bg-transparent text-xs sm:text-sm font-black text-white focus:outline-none cursor-pointer w-full uppercase"
-                >
-                  <option value="">ALL</option>
-                  <optgroup label="Americas">
-                    <option value="United States">US</option>
-                    <option value="Canada">CANADA</option>
-                    <option value="Brazil">BRAZIL</option>
-                    <option value="Argentina">ARGENTINA</option>
-                    <option value="Mexico">MEXICO</option>
-                    <option value="LATAM">LATAM</option>
-                  </optgroup>
-                  <optgroup label="Europe">
-                    <option value="United Kingdom">UK</option>
-                    <option value="Germany">GERMANY</option>
-                    <option value="France">FRANCE</option>
-                    <option value="EEA">EUROPE</option>
-                  </optgroup>
-                  <optgroup label="Asia Pacific">
-                    <option value="India">INDIA</option>
-                    <option value="Japan">JAPAN</option>
-                    <option value="Singapore">SINGAPORE</option>
-                    <option value="Australia">AUSTRALIA</option>
-                    <option value="APAC">APAC</option>
-                  </optgroup>
-                  <optgroup label="Other">
-                    <option value="Nigeria">NIGERIA</option>
-                    <option value="UAE">UAE</option>
-                    <option value="Global">GLOBAL</option>
-                  </optgroup>
-                </select>
-              </div>
-            </div>
-
-            {/* Currency */}
-            <div className="relative">
-              <label className="text-[10px] text-white/50 font-mono uppercase mb-1 block">
-                Currency
-              </label>
-              <div className="flex items-center gap-2 bg-black px-3 py-2 sm:py-3 border-4 border-white hover:border-lime-400 transition-colors cursor-pointer">
-                <DollarSign className="w-4 h-4 text-lime-400 shrink-0" />
-                <select
-                  value={filters.currency}
-                  onChange={(e) =>
-                    onFilterChange({ ...filters, currency: e.target.value })
-                  }
-                  className="bg-transparent text-xs sm:text-sm font-black text-white focus:outline-none cursor-pointer w-full uppercase"
-                >
-                  <option value="">ANY</option>
-                  <option value="USD">USD ($)</option>
-                  <option value="EUR">EUR (&euro;)</option>
-                  <option value="GBP">GBP (&pound;)</option>
-                  <option value="INR">INR</option>
-                  <option value="BRL">BRL (R$)</option>
-                </select>
-              </div>
-            </div>
-
-            {/* Privacy */}
-            <div className="relative">
-              <label className="text-[10px] text-white/50 font-mono uppercase mb-1 block">
-                Privacy
-              </label>
-              <div className="flex items-center gap-2 bg-black px-3 py-2 sm:py-3 border-4 border-white hover:border-lime-400 transition-colors cursor-pointer">
-                <Eye className="w-4 h-4 text-lime-400 shrink-0" />
-                <select
-                  value={filters.kyc}
-                  onChange={(e) =>
-                    onFilterChange({ ...filters, kyc: e.target.value })
-                  }
-                  className="bg-transparent text-xs sm:text-sm font-black text-white focus:outline-none cursor-pointer w-full uppercase"
-                >
-                  <option value="">ANY KYC</option>
-                  <option value="Required">REQUIRED</option>
-                  <option value="Light">LIGHT</option>
-                  <option value="None">NONE</option>
-                </select>
-              </div>
-            </div>
-
-            {/* Custody */}
-            <div className="relative">
-              <label className="text-[10px] text-white/50 font-mono uppercase mb-1 block">
-                Custody
-              </label>
-              <button
-                onClick={toggleSelfCustody}
-                className={`w-full px-3 py-2 sm:py-3 text-xs sm:text-sm font-black uppercase tracking-wider transition-all border-4 ${
-                  isSelfCustodyActive()
-                    ? "bg-lime-400 border-lime-400 text-black"
-                    : "bg-black border-white text-white"
-                }`}
-              >
-                Self-Custody
-              </button>
-            </div>
-          </div>
-
-          {hasActiveFilters && (
-            <button
-              onClick={clearFilters}
-              className="flex items-center gap-2 text-xs sm:text-sm font-black text-white hover:text-lime-400 px-3 py-2 border-4 border-white/50 hover:border-lime-400 transition-all uppercase w-full sm:w-auto justify-center"
+      {/* Line 2: Filters always visible */}
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+        {/* Region */}
+        <div className="relative">
+          <div className="flex items-center gap-2 bg-white/5 px-3 py-2.5 sm:py-3 border border-white/10 rounded-lg hover:border-moic-blue/50 transition-colors cursor-pointer">
+            <Globe className="w-4 h-4 text-moic-blue shrink-0" />
+            <select
+              value={filters.region}
+              onChange={(e) =>
+                onFilterChange({ ...filters, region: e.target.value })
+              }
+              className="bg-transparent text-xs sm:text-sm font-medium text-white focus:outline-none cursor-pointer w-full"
             >
-              <X className="w-4 h-4" />
-              Clear Filters
-            </button>
-          )}
+              <option value="">Region</option>
+              <optgroup label="Americas">
+                <option value="United States">US</option>
+                <option value="Canada">Canada</option>
+                <option value="Brazil">Brazil</option>
+                <option value="Argentina">Argentina</option>
+                <option value="Mexico">Mexico</option>
+                <option value="LATAM">LATAM</option>
+              </optgroup>
+              <optgroup label="Europe">
+                <option value="United Kingdom">UK</option>
+                <option value="Germany">Germany</option>
+                <option value="France">France</option>
+                <option value="EEA">Europe</option>
+              </optgroup>
+              <optgroup label="Asia Pacific">
+                <option value="India">India</option>
+                <option value="Japan">Japan</option>
+                <option value="Singapore">Singapore</option>
+                <option value="Australia">Australia</option>
+                <option value="APAC">APAC</option>
+              </optgroup>
+              <optgroup label="Other">
+                <option value="Nigeria">Nigeria</option>
+                <option value="UAE">UAE</option>
+                <option value="Global">Global</option>
+              </optgroup>
+            </select>
+          </div>
         </div>
-      )}
 
-      <div className="text-[10px] sm:text-[11px] text-white/40 font-mono uppercase">
-        {hasActiveFilters
-          ? `Filtered: ${resultsCount} cards`
-          : "Showing all cards"}
+        {/* Currency */}
+        <div className="relative">
+          <div className="flex items-center gap-2 bg-white/5 px-3 py-2.5 sm:py-3 border border-white/10 rounded-lg hover:border-moic-blue/50 transition-colors cursor-pointer">
+            <DollarSign className="w-4 h-4 text-moic-blue shrink-0" />
+            <select
+              value={filters.currency}
+              onChange={(e) =>
+                onFilterChange({ ...filters, currency: e.target.value })
+              }
+              className="bg-transparent text-xs sm:text-sm font-medium text-white focus:outline-none cursor-pointer w-full"
+            >
+              <option value="">Currency</option>
+              <option value="USD">USD ($)</option>
+              <option value="EUR">EUR</option>
+              <option value="GBP">GBP</option>
+              <option value="INR">INR</option>
+              <option value="BRL">BRL (R$)</option>
+            </select>
+          </div>
+        </div>
+
+        {/* KYC */}
+        <div className="relative">
+          <div className="flex items-center gap-2 bg-white/5 px-3 py-2.5 sm:py-3 border border-white/10 rounded-lg hover:border-moic-blue/50 transition-colors cursor-pointer">
+            <Eye className="w-4 h-4 text-moic-blue shrink-0" />
+            <select
+              value={filters.kyc}
+              onChange={(e) =>
+                onFilterChange({ ...filters, kyc: e.target.value })
+              }
+              className="bg-transparent text-xs sm:text-sm font-medium text-white focus:outline-none cursor-pointer w-full"
+            >
+              <option value="">KYC</option>
+              <option value="Required">Required</option>
+              <option value="Light">Light</option>
+              <option value="None">None</option>
+            </select>
+          </div>
+        </div>
+
+        {/* Custody */}
+        <button
+          onClick={toggleSelfCustody}
+          className={`px-3 py-2.5 sm:py-3 text-xs sm:text-sm font-semibold tracking-wide transition-all border rounded-lg ${
+            isSelfCustodyActive()
+              ? "bg-moic-blue border-moic-blue text-white"
+              : "bg-white/5 border-white/10 text-white/70 hover:border-moic-blue/50"
+          }`}
+        >
+          Self-Custody
+        </button>
+      </div>
+
+      {/* Active filters indicator + clear */}
+      <div className="flex items-center justify-between">
+        <span className="text-[10px] sm:text-[11px] text-white/30">
+          {hasActiveFilters
+            ? `Filtered: ${resultsCount} cards`
+            : `Showing all ${resultsCount} cards`}
+        </span>
+        {hasActiveFilters && (
+          <button
+            onClick={clearFilters}
+            className="flex items-center gap-1 text-xs font-medium text-white/50 hover:text-moic-blue transition-colors"
+          >
+            <X className="w-3 h-3" />
+            Clear
+          </button>
+        )}
       </div>
     </div>
   )

@@ -39,4 +39,3 @@ export interface Filters {
 }
 
 export type SortOption = "featured" | "cashbackHigh" | "nameAZ" | "newest"
-export type ViewMode = "discover" | "compare"
