@@ -2,14 +2,71 @@
 
 import {
   Search,
-  ChevronDown,
   X,
   Globe,
   DollarSign,
   Shield,
   KeyRound,
+  ArrowDownAZ,
 } from "lucide-react"
 import { Filters, SortOption } from "@/types/card"
+import FilterDropdown from "@/components/FilterDropdown"
+
+const REGION_ITEMS = [
+  {
+    groupLabel: "Americas",
+    options: [
+      { value: "United States", label: "US" },
+      { value: "Canada", label: "Canada" },
+      { value: "Brazil", label: "Brazil" },
+      { value: "Argentina", label: "Argentina" },
+      { value: "Mexico", label: "Mexico" },
+      { value: "LATAM", label: "LATAM" },
+    ],
+  },
+  {
+    groupLabel: "Europe",
+    options: [
+      { value: "United Kingdom", label: "UK" },
+      { value: "Germany", label: "Germany" },
+      { value: "France", label: "France" },
+      { value: "EEA", label: "Europe" },
+    ],
+  },
+  {
+    groupLabel: "Asia Pacific",
+    options: [
+      { value: "India", label: "India" },
+      { value: "Japan", label: "Japan" },
+      { value: "Singapore", label: "Singapore" },
+      { value: "Australia", label: "Australia" },
+      { value: "APAC", label: "APAC" },
+    ],
+  },
+  {
+    groupLabel: "Other",
+    options: [
+      { value: "Nigeria", label: "Nigeria" },
+      { value: "UAE", label: "UAE" },
+      { value: "Global", label: "Global" },
+    ],
+  },
+] as const
+
+const CURRENCY_ITEMS = [
+  { value: "USD", label: "USD ($)" },
+  { value: "EUR", label: "EUR" },
+  { value: "GBP", label: "GBP" },
+  { value: "INR", label: "INR" },
+  { value: "BRL", label: "BRL (R$)" },
+] as const
+
+const SORT_ITEMS = [
+  { value: "nameAZ", label: "A-Z" },
+  { value: "featured", label: "All" },
+  { value: "cashbackHigh", label: "Top Cashback" },
+  { value: "newest", label: "Newest" },
+] as const
 
 interface FilterBarProps {
   readonly filters: Filters
@@ -173,84 +230,31 @@ export default function FilterBar({
         </button>
 
         {/* Region */}
-        <div className="relative">
-          <div className="flex items-center gap-2 bg-white/5 px-3 py-2.5 sm:py-3 border border-white/10 rounded-lg hover:border-moic-blue/50 transition-colors cursor-pointer">
-            <Globe className="w-4 h-4 text-moic-blue shrink-0" />
-            <select
-              value={filters.region}
-              onChange={(e) =>
-                onFilterChange({ ...filters, region: e.target.value })
-              }
-              className="bg-transparent text-xs sm:text-sm font-medium text-white focus:outline-none cursor-pointer w-full"
-            >
-              <option value="">Region</option>
-              <optgroup label="Americas">
-                <option value="United States">US</option>
-                <option value="Canada">Canada</option>
-                <option value="Brazil">Brazil</option>
-                <option value="Argentina">Argentina</option>
-                <option value="Mexico">Mexico</option>
-                <option value="LATAM">LATAM</option>
-              </optgroup>
-              <optgroup label="Europe">
-                <option value="United Kingdom">UK</option>
-                <option value="Germany">Germany</option>
-                <option value="France">France</option>
-                <option value="EEA">Europe</option>
-              </optgroup>
-              <optgroup label="Asia Pacific">
-                <option value="India">India</option>
-                <option value="Japan">Japan</option>
-                <option value="Singapore">Singapore</option>
-                <option value="Australia">Australia</option>
-                <option value="APAC">APAC</option>
-              </optgroup>
-              <optgroup label="Other">
-                <option value="Nigeria">Nigeria</option>
-                <option value="UAE">UAE</option>
-                <option value="Global">Global</option>
-              </optgroup>
-            </select>
-          </div>
-        </div>
+        <FilterDropdown
+          icon={<Globe className="w-4 h-4 text-moic-blue shrink-0" />}
+          value={filters.region}
+          placeholder="Region"
+          items={REGION_ITEMS}
+          onChange={(val) => onFilterChange({ ...filters, region: val })}
+        />
 
         {/* Currency */}
-        <div className="relative">
-          <div className="flex items-center gap-2 bg-white/5 px-3 py-2.5 sm:py-3 border border-white/10 rounded-lg hover:border-moic-blue/50 transition-colors cursor-pointer">
-            <DollarSign className="w-4 h-4 text-moic-blue shrink-0" />
-            <select
-              value={filters.currency}
-              onChange={(e) =>
-                onFilterChange({ ...filters, currency: e.target.value })
-              }
-              className="bg-transparent text-xs sm:text-sm font-medium text-white focus:outline-none cursor-pointer w-full"
-            >
-              <option value="">Currency</option>
-              <option value="USD">USD ($)</option>
-              <option value="EUR">EUR</option>
-              <option value="GBP">GBP</option>
-              <option value="INR">INR</option>
-              <option value="BRL">BRL (R$)</option>
-            </select>
-          </div>
-        </div>
+        <FilterDropdown
+          icon={<DollarSign className="w-4 h-4 text-moic-blue shrink-0" />}
+          value={filters.currency}
+          placeholder="Currency"
+          items={CURRENCY_ITEMS}
+          onChange={(val) => onFilterChange({ ...filters, currency: val })}
+        />
 
         {/* Sort */}
-        <div className="relative">
-          <select
-            value={sort}
-            onChange={(e) => onSortChange(e.target.value as SortOption)}
-            className="appearance-none w-full bg-white/5 text-white py-2.5 sm:py-3 pl-3 sm:pl-4 pr-9 border border-white/10 rounded-lg text-xs sm:text-sm font-semibold focus:outline-none focus:border-moic-blue cursor-pointer transition-all"
-          >
-            <option value="nameAZ">A-Z</option>
-            <option value="featured">All</option>
-            <option value="cashbackHigh">Top Cashback</option>
-            <option value="newest">Newest</option>
-          </select>
-          <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2.5 text-white/40">
-            <ChevronDown className="h-4 w-4" />
-          </div>
-        </div>
+        <FilterDropdown
+          icon={<ArrowDownAZ className="w-4 h-4 text-moic-blue shrink-0" />}
+          value={sort}
+          placeholder="Sort"
+          items={SORT_ITEMS}
+          onChange={(val) => onSortChange(val as SortOption)}
+        />
       </div>
 
       {/* Row 3: Results count + clear */}

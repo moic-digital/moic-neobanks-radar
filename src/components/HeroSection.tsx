@@ -75,13 +75,15 @@ export default function HeroSection() {
 
         <div className="flex items-center gap-2.5 mt-3">
           <span className="text-white/50 text-xs sm:text-sm">Powered by</span>
-          <Image
-            src="/logos/moic-logo.png"
-            alt="MOIC"
-            width={80}
-            height={32}
-            className="opacity-90"
-          />
+          <a href="https://www.moicdigital.com/" target="_blank" rel="noopener noreferrer">
+            <Image
+              src="/logos/moic-logo.png"
+              alt="MOIC"
+              width={80}
+              height={32}
+              className="opacity-90 hover:opacity-100 transition-opacity"
+            />
+          </a>
         </div>
 
         <p className="text-white/40 text-sm sm:text-base text-center max-w-xl mx-auto mt-4 leading-relaxed">

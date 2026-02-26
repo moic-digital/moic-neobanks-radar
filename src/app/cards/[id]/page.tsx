@@ -208,7 +208,7 @@ export default async function CardPage({ params }: CardPageProps) {
 
         {/* Block 3 - Metrics grid */}
         <section className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
-          <div className="border border-moic-blue/40 bg-moic-surface rounded-xl p-4 flex flex-col items-center justify-center text-center shadow-[0_0_24px_rgba(42,96,251,0.2),0_0_48px_rgba(42,96,251,0.08)]">
+          <div className="border border-moic-blue/40 bg-moic-surface rounded-xl p-4 flex flex-col items-center justify-center text-center shadow-[0_0_24px_rgba(42,96,251,0.2),0_0_48px_rgba(42,96,251,0.08)] hover:-translate-y-1 hover:border-moic-blue/60 hover:shadow-[0_0_24px_rgba(42,96,251,0.25),0_0_48px_rgba(42,96,251,0.1)] transition-all duration-300">
             <span className="text-moic-blue text-[9px] sm:text-[10px] uppercase tracking-widest mb-1">
               Max Cashback
             </span>
@@ -216,7 +216,7 @@ export default async function CardPage({ params }: CardPageProps) {
               {cashbackLabel}
             </span>
           </div>
-          <div className="border border-white/[0.08] bg-moic-surface rounded-xl p-4 flex flex-col items-center justify-center text-center">
+          <div className="border border-white/[0.08] bg-moic-surface rounded-xl p-4 flex flex-col items-center justify-center text-center hover:-translate-y-1 hover:border-moic-blue/60 hover:shadow-[0_0_24px_rgba(42,96,251,0.25),0_0_48px_rgba(42,96,251,0.1)] transition-all duration-300">
             <span className="text-white/40 text-[9px] sm:text-[10px] uppercase tracking-widest mb-1">
               Annual Fee
             </span>
@@ -224,7 +224,7 @@ export default async function CardPage({ params }: CardPageProps) {
               {card.annualFee}
             </span>
           </div>
-          <div className="border border-white/[0.08] bg-moic-surface rounded-xl p-4 flex flex-col items-center justify-center text-center">
+          <div className="border border-white/[0.08] bg-moic-surface rounded-xl p-4 flex flex-col items-center justify-center text-center hover:-translate-y-1 hover:border-moic-blue/60 hover:shadow-[0_0_24px_rgba(42,96,251,0.25),0_0_48px_rgba(42,96,251,0.1)] transition-all duration-300">
             <span className="text-white/40 text-[9px] sm:text-[10px] uppercase tracking-widest mb-1">
               Time in Market
             </span>
@@ -232,7 +232,7 @@ export default async function CardPage({ params }: CardPageProps) {
               {ageLabel}
             </span>
           </div>
-          <div className="border border-white/[0.08] bg-moic-surface rounded-xl p-4 flex flex-col items-center justify-center text-center">
+          <div className="border border-white/[0.08] bg-moic-surface rounded-xl p-4 flex flex-col items-center justify-center text-center hover:-translate-y-1 hover:border-moic-blue/60 hover:shadow-[0_0_24px_rgba(42,96,251,0.25),0_0_48px_rgba(42,96,251,0.1)] transition-all duration-300">
             <span className="text-white/40 text-[9px] sm:text-[10px] uppercase tracking-widest mb-1">
               KYC
             </span>
