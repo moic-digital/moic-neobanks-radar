@@ -6,7 +6,7 @@ import {
   X,
   Globe,
   DollarSign,
-  Eye,
+  Shield,
 } from "lucide-react"
 import { Filters, SortOption } from "@/types/card"
 
@@ -48,6 +48,10 @@ export default function FilterBar({
     onFilterChange({ ...filters, custody: newCustody })
   }
 
+  function handleKycChange(value: string) {
+    onFilterChange({ ...filters, kyc: value })
+  }
+
   function clearFilters() {
     onFilterChange({
       search: filters.search,
@@ -65,40 +69,22 @@ export default function FilterBar({
 
   return (
     <div className="w-full mb-6 sm:mb-8 py-4 sm:py-6 space-y-4">
-      {/* Line 1: Search + Sort */}
-      <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
-        <div className="relative flex-1">
-          <div className="absolute inset-y-0 left-0 pl-3 sm:pl-4 flex items-center pointer-events-none">
-            <Search className="h-4 w-4 sm:h-5 sm:w-5 text-white/30" />
-          </div>
-          <input
-            type="text"
-            placeholder="Search neobanks..."
-            className="block w-full pl-10 sm:pl-12 pr-4 py-3 sm:py-3.5 bg-white/5 border border-white/10 rounded-lg text-white placeholder-white/30 focus:outline-none focus:border-moic-blue focus:shadow-[0_0_12px_rgba(42,96,251,0.2)] text-xs sm:text-sm tracking-wide transition-all"
-            value={filters.search}
-            onChange={handleSearch}
-          />
+      {/* Row 1: Search — full width */}
+      <div className="relative w-full">
+        <div className="absolute inset-y-0 left-0 pl-4 sm:pl-5 flex items-center pointer-events-none">
+          <Search className="h-4 w-4 sm:h-5 sm:w-5 text-white/30" />
         </div>
-
-        <div className="relative shrink-0">
-          <select
-            value={sort}
-            onChange={(e) => onSortChange(e.target.value as SortOption)}
-            className="appearance-none w-full bg-white/5 text-white py-3 sm:py-3.5 pl-3 sm:pl-4 pr-10 sm:pr-12 border border-white/10 rounded-lg text-xs sm:text-sm font-semibold focus:outline-none focus:border-moic-blue cursor-pointer transition-all"
-          >
-            <option value="nameAZ">A-Z</option>
-            <option value="featured">All</option>
-            <option value="cashbackHigh">Top Cashback</option>
-            <option value="newest">Newest</option>
-          </select>
-          <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-white/40">
-            <ChevronDown className="h-4 w-4" />
-          </div>
-        </div>
+        <input
+          type="text"
+          placeholder="Search neobanks..."
+          className="block w-full pl-11 sm:pl-13 pr-4 py-3.5 sm:py-4 bg-white/5 border border-white/10 rounded-xl text-white placeholder-white/30 focus:outline-none focus:border-moic-blue focus:shadow-[0_0_12px_rgba(42,96,251,0.2)] text-sm sm:text-base tracking-wide transition-all"
+          value={filters.search}
+          onChange={handleSearch}
+        />
       </div>
 
-      {/* Line 2: Filters always visible */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+      {/* Row 2: All filters + sort */}
+      <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
         {/* Region */}
         <div className="relative">
           <div className="flex items-center gap-2 bg-white/5 px-3 py-2.5 sm:py-3 border border-white/10 rounded-lg hover:border-moic-blue/50 transition-colors cursor-pointer">
@@ -165,23 +151,20 @@ export default function FilterBar({
         {/* KYC */}
         <div className="relative">
           <div className="flex items-center gap-2 bg-white/5 px-3 py-2.5 sm:py-3 border border-white/10 rounded-lg hover:border-moic-blue/50 transition-colors cursor-pointer">
-            <Eye className="w-4 h-4 text-moic-blue shrink-0" />
+            <Shield className="w-4 h-4 text-moic-blue shrink-0" />
             <select
               value={filters.kyc}
-              onChange={(e) =>
-                onFilterChange({ ...filters, kyc: e.target.value })
-              }
+              onChange={(e) => handleKycChange(e.target.value)}
               className="bg-transparent text-xs sm:text-sm font-medium text-white focus:outline-none cursor-pointer w-full"
             >
               <option value="">KYC</option>
-              <option value="Required">Required</option>
-              <option value="Light">Light</option>
-              <option value="None">None</option>
+              <option value="required">With KYC</option>
+              <option value="None">No KYC</option>
             </select>
           </div>
         </div>
 
-        {/* Custody */}
+        {/* Self-Custody toggle */}
         <button
           onClick={toggleSelfCustody}
           className={`px-3 py-2.5 sm:py-3 text-xs sm:text-sm font-semibold tracking-wide transition-all border rounded-lg ${
@@ -192,9 +175,26 @@ export default function FilterBar({
         >
           Self-Custody
         </button>
+
+        {/* Sort */}
+        <div className="relative">
+          <select
+            value={sort}
+            onChange={(e) => onSortChange(e.target.value as SortOption)}
+            className="appearance-none w-full bg-white/5 text-white py-2.5 sm:py-3 pl-3 sm:pl-4 pr-9 border border-white/10 rounded-lg text-xs sm:text-sm font-semibold focus:outline-none focus:border-moic-blue cursor-pointer transition-all"
+          >
+            <option value="nameAZ">A-Z</option>
+            <option value="featured">All</option>
+            <option value="cashbackHigh">Top Cashback</option>
+            <option value="newest">Newest</option>
+          </select>
+          <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2.5 text-white/40">
+            <ChevronDown className="h-4 w-4" />
+          </div>
+        </div>
       </div>
 
-      {/* Active filters indicator + clear */}
+      {/* Row 3: Results count + clear */}
       <div className="flex items-center justify-between">
         <span className="text-[10px] sm:text-[11px] text-white/30">
           {hasActiveFilters

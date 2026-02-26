@@ -1,9 +1,9 @@
 "use client"
 
 import { useState, useMemo } from "react"
-import Image from "next/image"
 import { Filters, SortOption, CardData } from "@/types/card"
 import { matchesRegion } from "@/utils/regions"
+import HeroSection from "@/components/HeroSection"
 import CryptoCard from "@/components/CryptoCard"
 import FilterBar from "@/components/FilterBar"
 
@@ -52,7 +52,11 @@ export default function HomePage({ cards }: HomePageProps) {
       const matchesRegionFilter = matchesRegion(card.regions, filters.region)
 
       const matchesKyc =
-        filters.kyc === "" || card.kyc === filters.kyc
+        filters.kyc === ""
+          ? true
+          : filters.kyc === "required"
+            ? card.kyc === "Required" || card.kyc === "Light"
+            : card.kyc === "None"
 
       const matchesCurrency =
         filters.currency === "" ||
@@ -88,25 +92,7 @@ export default function HomePage({ cards }: HomePageProps) {
 
   return (
     <div className="min-h-screen bg-moic-navy selection:bg-moic-blue selection:text-white">
-      <header className="h-16 sm:h-20 md:h-24 flex items-center px-4 sm:px-6 md:px-8 bg-moic-navy border-b border-white/10">
-        <div className="flex items-center gap-3 sm:gap-4 flex-1 min-w-0">
-          <Image
-            src="/logos/moic-logo.png"
-            alt="MOIC"
-            width={36}
-            height={36}
-            className="shrink-0"
-          />
-          <div className="flex-1 min-w-0">
-            <h1 className="text-lg sm:text-2xl md:text-3xl font-bold text-white tracking-tight truncate" style={{ fontFamily: "'Clash Grotesk', sans-serif" }}>
-              MOIC Hub
-            </h1>
-            <p className="text-white/40 text-[10px] sm:text-xs mt-0.5">
-              {filteredCards.length} neobanks
-            </p>
-          </div>
-        </div>
-      </header>
+      <HeroSection />
 
       <main className="px-4 sm:px-6 md:px-8 pb-12 bg-moic-navy">
         <FilterBar

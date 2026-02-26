@@ -10,7 +10,7 @@ const sora = Sora({
 })
 
 export const metadata: Metadata = {
-  title: "MOIC Hub | Crypto Card Aggregator",
+  title: "Neobank Radar | Crypto Card Aggregator",
   description: "Compare and discover the best crypto debit and credit cards",
 }
 
