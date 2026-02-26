@@ -208,11 +208,11 @@ export default async function CardPage({ params }: CardPageProps) {
 
         {/* Block 3 - Metrics grid */}
         <section className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
-          <div className="border border-moic-blue/40 bg-moic-surface rounded-xl p-4 flex flex-col items-center justify-center text-center shadow-[0_0_24px_rgba(42,96,251,0.2),0_0_48px_rgba(42,96,251,0.08)] hover:-translate-y-1 hover:border-moic-blue/60 hover:shadow-[0_0_24px_rgba(42,96,251,0.25),0_0_48px_rgba(42,96,251,0.1)] transition-all duration-300">
-            <span className="text-moic-blue text-[9px] sm:text-[10px] uppercase tracking-widest mb-1">
+          <div className="border border-amber-400/40 bg-moic-surface rounded-xl p-4 flex flex-col items-center justify-center text-center shadow-[0_0_24px_rgba(251,191,36,0.15),0_0_48px_rgba(251,191,36,0.06)] hover:-translate-y-1 hover:border-amber-400/70 hover:shadow-[0_0_24px_rgba(251,191,36,0.3),0_0_48px_rgba(251,191,36,0.12)] transition-all duration-300">
+            <span className="text-amber-400 text-[9px] sm:text-[10px] uppercase tracking-widest mb-1">
               Max Cashback
             </span>
-            <span className="text-moic-blue font-bold text-xl sm:text-2xl">
+            <span className="text-amber-400 font-bold text-xl sm:text-2xl">
               {cashbackLabel}
             </span>
           </div>

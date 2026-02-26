@@ -222,7 +222,7 @@ export default function FilterBar({
         >
           <KeyRound className={`w-4 h-4 shrink-0 ${getTriStateIconClasses(selfCustodyState)}`} />
           <span>
-            {selfCustodyState === "none" && "Self-Custody"}
+            {selfCustodyState === "none" && "Custody"}
             {selfCustodyState === "with" && "Self-Custody"}
             {selfCustodyState === "without" && "Custodial"}
           </span>
